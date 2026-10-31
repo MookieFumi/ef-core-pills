@@ -1,0 +1,16 @@
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.cs]
+# One type per file, file-scoped namespaces, braces on every block.
+csharp_style_namespace_declarations = file_scoped:warning
+csharp_prefer_braces = true:warning
+csharp_new_line_before_open_brace = all
+dotnet_diagnostic.IDE0011.severity = warning
+dotnet_diagnostic.IDE0130.severity = warning
