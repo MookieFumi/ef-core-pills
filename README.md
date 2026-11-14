@@ -9,7 +9,7 @@ sent to the database, the rows read and the median time.
 ```bash
 cd src/EfCorePills
 dotnet run -c Release                 # all pills
-dotnet run -c Release -- n-plus-one   # tracking | projection | paging | in-memory | cartesian | bulk | any
+dotnet run -c Release -- n-plus-one   # tracking | projection | paging | in-memory | cartesian | bulk | any | registration
 ```
 
 Requires the .NET 10 SDK. The first run creates `pills.db` (about 500 MB, mostly the simulated PDF column) and takes a minute.
@@ -33,6 +33,7 @@ src/EfCorePills/
     CartesianExplosion/   cartesian
     BulkUpdate/           bulk
     AnyVsCount/           any
+    DbContextRegistration/ registration (AddDbContext, AddDbContextPool, AddDbContextFactory)
 ```
 
 Code style: one type per file, file-scoped namespaces and braces on every block (see `.editorconfig`).

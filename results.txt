@@ -66,3 +66,26 @@ AnyAsync()                         commands=     1  rows=       1  median=     3
 -- 1,000,000 shipments, Carrier = 'Carrier 3' (no index, thousands of matches)
 Count() > 0                        commands=     1  rows=       1  median=    46 ms (n=7)
 AnyAsync()                         commands=     1  rows=       1  median=     0 ms (n=7)
+
+
+=== AddDbContext, AddDbContextPool and AddDbContextFactory ===
+-- AddDbContext: one instance per scope (one scope = one HTTP request)
+same scope, resolved twice -> same instance: True
+different scopes            -> same instance: False
+
+=== AddDbContextPool: instances are reused and reset ===
+sequential scopes: 5000  distinct DbContext instances: 1
+entities tracked when a request started (should be 0): 0
+
+=== 5,000 sequential 'requests' (new scope + one tiny query) ===
+AddDbContext                       commands=  5000  rows=    5000  median=   542 ms (n=7)
+AddDbContextPool                   commands=  5000  rows=    5000  median=   252 ms (n=7)
+AddDbContextFactory                commands=  5000  rows=    5000  median=   515 ms (n=7)
+
+=== Parallel work: one shared context vs one context per task ===
+shared scoped context, 8 parallel queries: InvalidOperationException
+factory, 8 parallel queries (one context each): 8 results, all 200
+
+=== What AddDbContextFactory registers ===
+IDbContextFactory<ShopContext> registered: True
+ShopContext resolvable straight from the container: True
