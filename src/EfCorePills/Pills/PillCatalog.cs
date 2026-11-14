@@ -1,6 +1,7 @@
 using EfCorePills.Pills.AnyVsCount;
 using EfCorePills.Pills.BulkUpdate;
 using EfCorePills.Pills.CartesianExplosion;
+using EfCorePills.Pills.DbContextRegistration;
 using EfCorePills.Pills.InMemoryFilter;
 using EfCorePills.Pills.NPlusOne;
 using EfCorePills.Pills.Pagination;
@@ -21,5 +22,6 @@ public static class PillCatalog
         new CartesianExplosionPill(),
         new BulkUpdatePill(),
         new AnyVsCountPill(),
+        new DbContextRegistrationPill(),
     ];
 }
