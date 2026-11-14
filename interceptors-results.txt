@@ -1,0 +1,39 @@
+
+1. ISaveChangesInterceptor: audit fields and soft delete
+  after insert: CreatedOn=2026-11-14T11:44:08.6524391Z UpdatedOn=null
+  after update: UpdatedOn=2026-11-14T11:44:08.7399135Z
+  after Remove: visible=0, rows in table=1, IsDeleted=True
+
+2. IDbCommandInterceptor: see the SQL that really goes out
+  [slow query] 0 ms >= 0 ms
+  INSERT INTO "Products" ("CreatedOn", "IsDeleted", "Name", "Price", "UpdatedOn") VALUES (@p0, @p1, @p2, @p3, @p4) RETURNING "Id"; 
+  [slow query] 0 ms >= 0 ms
+  SELECT "p"."Id", "p"."CreatedOn", "p"."IsDeleted", "p"."Name", "p"."Price", "p"."UpdatedOn" FROM "Products" AS "p" WHERE NOT ("p"."IsDeleted") AND "p"."Price" < 100.0
+  products read: 1
+
+3. IDbConnectionInterceptor: one database per tenant
+  [connection] opening tenant-a.db
+  [connection] opening tenant-b.db
+  products seen as tenant-b: 0
+  [connection] opening tenant-a.db
+  products seen as tenant-a: 1
+
+4. IDbTransactionInterceptor: commit and rollback
+  [transaction] committed 6c28e020-2e50-40d2-98ab-62974524494d
+  SaveChanges failed (unique index)
+  [transaction] rolled back 23fd244c-832f-4b53-90fc-522a1dfef4df
+
+5. IMaterializationInterceptor: set a property that is not in the table
+  LoadedAt (not mapped) = 2026-11-14T11:44:09.1251531Z
+
+6. IQueryExpressionInterceptor: change the LINQ before it becomes SQL
+  ToList() without Take: 5 rows (table has 20)
+  Take(3): 3 rows
+  Count(): 20
+
+7. IIdentityResolutionInterceptor: two instances, one key
+  without interceptor:
+  InvalidOperationException: The instance of entity type 'Product' cannot be tracked because another instance with the same key value for {'Id'} is already being tracked.
+  with interceptor:
+  [identity] key already tracked, merging values into the existing Product
+  tracked product is now 'Dock v2' at 120

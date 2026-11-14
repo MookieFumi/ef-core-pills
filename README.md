@@ -37,3 +37,14 @@ src/EfCorePills/
 ```
 
 Code style: one type per file, file-scoped namespaces and braces on every block (see `.editorconfig`).
+
+## Interceptors demo
+
+`src/EfCoreInterceptors` is a second, much smaller console app (SQLite, no seeding) with one demo per EF Core interceptor type.
+Output used in the interceptors post is in `interceptors-results.txt`.
+
+```bash
+cd src/EfCoreInterceptors
+dotnet run -c Release                  # all demos
+dotnet run -c Release -- query         # save | command | connection | transaction | materialization | query | identity
+```
